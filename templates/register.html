@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" lang="zh">
+     <link rel="icon" type="image/x-ico" href="<< url_for('static',filename='images/logo.png') >>">
+    <title>AUBBS</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <!-- 引用jquery -->
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+
+    <!--引用bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!--引用vue-->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <!--引用本地js和css-->
+     <script src="<< url_for('static',filename='register/register.js') >>"></script>
+     <link rel="stylesheet" href="<< url_for('static',filename='register/register.css') >>">
+
+    <!-- md5 -->
+    <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+
+
+</head>
+<body id="body">
+    
+    <main id="main">
+        <div class="welcome_page">
+            <img src="../static/images/register.png" alt="" class="main-page">
+        </div>
+        <div class="info">
+            <div class="alert alert-primary notification">
+                    只需<strong>一步</strong>, 加入AUBBS
+            </div>
+            <input type="file" id="photofile" @change="pickedPhoto()" accept="image/*">
+            <div class="avatar">
+                <img v-bind:src="img_url" alt="">
+
+                <div class="btn-group-vertical">
+                    <button type="button" class="btn btn-primary btn_select" @click="getRandomImg()">随机一张图片</button>
+                    <button type="button" class="btn btn-primary btn_select" onclick="$('#photofile').click()">选择一张图片</button>
+                </div>
+                
+            </div>
+            <div class="check_email">
+                <div class="input-group mb-3">
+                    
+                    <!-- autocomplete 属性用于重新刷新页面后，是否保持该input上的文本，on and off -->
+                    <input type="text" class="form-control" id="email" v-bind:placeholder="email" autocomplete='on' disabled='disabled'>
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-primary" id="btn_sendcode" @click="getVeriCode(60)">获取验证码</button>
+                    </div>
+                </div>
+                <input type="text" class="form-control input_code" id="input_code" placeholder="输入验证码:">
+
+
+            </div>
+            <div class="check_name">
+                <input type="text" class="form-control input_name" id="input_name" placeholder="设置一个昵称" autocomplete='on'>
+                <!-- <input type="password" class="form-control input_password" id="input_password" placeholder="设置一个密码" autocomplete='on'> -->
+
+            </div>
+            <button type="button" class="btn btn-primary btn_register" @click="register()" >注册</button>
+
+        </div>
+        
+
+        </div>
+        <script>
+            var regvue = new Vue({
+                el: "#main",
+                data: {
+                    email: "<< email >>",
+                    img_url: "<< url_for('static',filename='images/avatar/0.png') >>",
+                    wait_second: 60,
+                    password: "<< password >>",
+                },methods: {
+                    getRandomImg: function() {
+                        var timestamp = new Date().valueOf();
+                        var md5_str = md5(timestamp + this.email)
+                        var style = ['identicon', 'monsterid', 'wavatar']
+                        style = style[parseInt((Math.random() * style.length))]
+                        // console.log(md5_str)
+                        var url = "http://www.gravatar.com/avatar/" + md5_str + "?s=100&d=" + style
+                        this.img_url = url                          
+                    },getVeriCode: function() {
+                        //get 发送邮件的api
+                        $.post("/api/register/vericode", {"email":this.email,},function(data, status){
+                            // alert(data + "--n" + status);
+                        });
+
+                        $("#btn_sendcode").attr("disabled", true);
+                        this.timer(60)
+                    },timer: function(second) {
+                        if(second == 0) {
+                            $("#btn_sendcode").removeAttr("disabled");
+                            $("#btn_sendcode").text("重新发送")
+                        }else {
+                            $("#btn_sendcode").text("重新发送" + second)
+                            setTimeout(this.timer, 1000, second - 1);
+                        }
+                    },register: function() {
+                        var img_url = window.btoa(this.img_url)
+                        var email = window.btoa(this.email)
+                        var veri_code = window.btoa($("#input_code").val())
+                        var nickname = window.btoa($("#input_name").val())
+                        var password = window.btoa(this.password)
+
+                        if (veri_code.length == 0) {
+                            alert("CRG003:验证码不允许为空")
+                        }
+                        if (nickname.length == 0) {
+                            alert("CRG004:用户名不允许为空")
+                        }
+
+
+
+                        $.ajax({
+                            url: '/api/register/',
+                            type: 'post',
+                            async: false,
+                            cache: false,
+                            data: {"img_url":img_url, "email":email, "veri_code": veri_code, "nickname": nickname, "password":  password},
+                            dataType: 'json',
+                            success: function (data) {
+                                var code = data.code
+                                var msg = data.msg
+                                // 注册成功
+                                if (code == "ARG006") {
+                                    location.href = msg
+                                }else {
+                                    alert("错误 " + code + msg)
+                                }
+                            },error: function () {
+                                // 注册失败，弹出错误信息。
+                                alert("CRG001:未知错误");
+
+                            }
+                        });      
+                    },pickedPhoto: function () {
+                        var formData = new FormData();
+                        var image_file = $("#photofile")[0].files[0];
+                        formData.append("photo", image_file)
+                        var that = this
+                        $.ajax({
+                            url: '/api/upload/avatar/',
+                            type: 'post',
+                            data: formData,
+                            dataType: "json",
+                            processData: false,
+                            contentType: false,
+                            success: function (data) {
+                                var code = data.code
+                                var msg = data.msg
+                                // 上传图像成功
+                                if (code === "AUA001") {
+                                    that.img_url = msg;
+
+                                }else {
+                                    alert("错误 " + code + msg)
+                                }
+                            },error: function () {
+                                // 注册失败，弹出错误信息。
+                                alert("CRG002:未知错误");
+                            }
+                        });
+                    }
+
+                },mounted() {
+                    this.getRandomImg();
+                }
+            })
+        </script>
+    </main>
+    
+    
+    
+    
+    
+</body>
+</html>

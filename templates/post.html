@@ -1,0 +1,160 @@
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" lang="zh">
+    <link rel="icon" type="image/x-ico" href="<< url_for('static', filename='images/logo.png') >>">
+
+    <title>AUBBS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <!-- 引用jquery -->
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+
+    <!--引用bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+    <!--引用vue-->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <!--引用本地js和css-->
+     <script src="<< url_for('static',filename='post/post.js') >>"></script>
+     <link rel="stylesheet" href="<< url_for('static',filename='post/post.css') >>">
+
+</head>
+<body>
+    <header class='header'>
+        <div class="header-div">
+            <img id='logo' src="<< url_for('static', filename='images/logo_words.png') >>" onclick="window.location.href = '/'" alt="">
+
+
+            <div class="user-info">
+                <button v-if="login" type="button" class="btn btn-success btn-sm user-info-post" onclick="window.location.href = '/posting/'">发帖</button>
+                <button v-if="login" type="button" class="btn btn-info btn-sm user-info-notification">消息(<<notice_num>>)</button>
+                <img v-if="login" class='user-info-person' v-bind:src="getUserImg(<<user_id>>)" onerror="this.src = '<< url_for('static', filename='images/avatar/0.png') >>'" alt="">
+                
+                <a class="unlogin" v-if="!login" href="/login/">登录/注册</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="main">
+        <div class="host-box">
+
+            <img class='user-pic' v-bind:src="getUserImg(host.hosterID)" alt="">
+
+
+            <div class="host-topic">
+                <h2>{{host.topic}}</h2>
+                <div class="host-info"><a class='user-name' href="">{{host.hosterName}}</a><span>  发布于{{getTimeGap(host.postedTime)}}</span><span>  {{host.clickNum}}次点击</span><span>  #{{host.postID}}</span> </div>
+            </div>
+
+            <div class="host-content">
+                {{host.content}}
+                <div class="divider"></div>
+            </div>
+
+
+        </div>
+        <div class="answers-box">
+            <div class="answers-box-info">
+                << info >>
+            </div>
+            <div class="divider"></div>
+
+
+            <div class='answer-sur' v-for='answer in answers'>
+                <div class="answer">
+                    <img class='answer-pic' v-bind:src="getUserImg(answer.replyerID)" alt="" onerror="this.src = '<< url_for('static', filename='images/avatar/0.png') >>'">
+                    <a class='answer-name' href="">{{answer.replyerName}}</a>
+                    <div class='answer-time'>{{getTimeGap(answer.replyTime)}}</div>
+                    <div class='answer-floor'>#{{answer.floor}}</div>
+                    <div class="answer-content">
+                        {{answer.replyContent}}
+                    </div>
+                </div>
+                <div class="divider"></div>
+
+            </div>
+
+
+
+        </div>
+        <div class="reply-box">
+            <textarea class="form-control reply-box-content"  id="reply-box" cols="30" rows="10" placeholder="输入要回复的内容..." maxlength="10000"></textarea>
+
+            <button type="button" class="btn btn-primary reply-send" onclick="reply()" >回复</button>
+
+        </div>
+
+    </main>
+
+    <!--    页尾-->
+    <footer>
+        <div class="divider"></div>
+        <p >我们是没有底线的</p>
+    </footer>
+    <!--    页尾结束-->
+
+    <script>
+        var headervue = new Vue({
+            el: ".header",
+            data: {
+                login: <<login>>,
+                notice_num: <<notice_num>>,
+                user_id: <<user_id>>,
+
+        },methods: {
+            getUserImg: function(e) {
+                return "<<url_for('static',filename='images/avatar/') >>" + String(e) + ".png"
+            },
+        }
+        })
+
+        var postvue = new Vue({
+            el: "#main",
+            data: {
+                host:
+                    {% autoescape false %}
+                    << host_data >>
+                    {% endautoescape %}
+
+                answers: [
+                    {% autoescape false %}
+                    << reply_data >>
+                    {% endautoescape %}
+
+                ],
+                loading: false
+
+            },mounted () {
+                // 添加滚动事件，检测滚动到页面底部
+                // window.addEventListener('scroll', this.scrollBottom)
+            },
+            methods: {
+                getUserImg: function(e) {
+                    return "<<url_for('static',filename='images/avatar/') >>" + String(e) + ".png"
+
+                },getTimeGap: function(e) {
+                    //获取最后回复的时间
+                    var start_time = e
+                    var start_time = new Date(start_time);
+                    var end_time = new Date()
+                    gap = (end_time - start_time) / 1000
+                    if(gap < 60) {
+                        return '几秒前'
+                    }else if(gap < 3600) {
+                        return parseInt(gap/60) + "分钟前"
+                    }else if(gap < 86400) {
+                        return parseInt(gap/60/60) + "小时前"
+                    }else if(gap < 604800) {
+                        return parseInt(gap/60/60/24) + "天前"
+                    }else{
+                        return "很久以前"
+                    }
+                    return gap;
+                }
+                       
+            }
+        })
+    </script>
+</body>
+</html>

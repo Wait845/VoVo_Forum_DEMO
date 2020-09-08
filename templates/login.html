@@ -1,0 +1,79 @@
+<html lang="zh">
+    <head>
+        <meta charset="UTF-8" lang="zh">
+        <link rel="icon" type="image/x-ico" href="<< url_for('static',filename='images/logo.png') >>">
+        <title>AUBBS</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+        <!-- 引用jquery -->
+        <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+
+        <!--引用bootstrap-->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+
+        <!--引用vue-->
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+        <!--引用本地js和css-->
+         <script src="<< url_for('static',filename='login/login.js') >>"></script>
+         <link rel="stylesheet" href="<< url_for('static',filename='login/login.css') >>">
+
+    </head>
+<body>
+    <!-- color #3D62DA -->
+    <main id="main">
+        <!-- 图片部分 -->
+        <div class='welcome_page'>
+            <!-- <img src="{{ url_for('static',filename='images/chat.jpg') }}" alt=""> -->
+            <img src="../static/images/chat.jpg" alt="">
+        </div>
+        <!-- 提示部分 -->
+        <div class="alert alert-danger alert-dismissable">
+            <p></p>
+        </div>
+        <!-- 表单部分 -->
+        <div class="form">
+            <!--
+            onsubmit="return check()"
+            -->
+            <!-- <form name="login" action="http://127.0.0.1:88/api/login/" method="POST" > -->
+                <div class="input-group mb-3">
+                    <!-- <div class="input-group-prepend">
+                        <span class="input-group-text">U</span>
+                    </div>
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">G</span>
+                    </div> -->
+                    <!-- autocomplete 属性用于重新刷新页面后，是否保持该input上的文本，on and off -->
+                    <input type="text" class="form-control" id="id" name="email" placeholder="ID #u6110000" autocomplete='on'>
+                    <div class="input-group-append">
+                      <span class="input-group-text">@gmail.com</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                <input type="password" class="form-control" id="pwd" name="pwd" placeholder="Password" autocomplete='off'>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="login">登录/注册</button>
+            <!-- </form> -->
+        </div>
+        <!-- Q&A部分 -->
+        <div class="qanda">
+            <a id="showqanda" href="#qanda" onclick="qanda()">Q&A?</a>
+            <div id="qanda">
+                <p class="question">Q- 问题</p>
+                <p class="answer">A- 回答</p>
+                <div class="divider"></div>
+                
+            </div>
+        </div>
+    </main>
+    
+    
+      
+      
+         
+    
+</body>
+</html>

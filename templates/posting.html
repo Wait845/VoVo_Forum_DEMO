@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" lang="zh">
+     <link rel="icon" type="image/x-ico" href="<< url_for('static',filename='images/logo.png') >>">
+    <title>AUBBS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <!-- 引用jquery -->
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <!--引用bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!--引用vue-->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <!--引用本地js和css-->
+     <script src="<< url_for('static',filename='posting/posting.js') >>"></script>
+     <link rel="stylesheet" href="<< url_for('static',filename='posting/posting.css') >>">
+
+    <!-- showdown -->
+    <script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
+
+    <link rel="stylesheet" href="<< url_for('static', filename='css/sspai.css') >>">
+
+
+   
+
+    
+
+
+</head>
+<body id="body">
+    <!-- header -->
+    <header class='header'>
+        <div class="header-div">
+            <img id='logo' src="<< url_for('static', filename='images/logo_words.png') >>" onclick="window.location.href = '/'" alt="">
+
+
+            <div class="user-info">
+                <button v-if="login" type="button" class="btn btn-success btn-sm user-info-post" v-on:click="posting()">发帖</button>
+                <button v-if="login" type="button" class="btn btn-info btn-sm user-info-notification">消息(<<notice_num>>)</button>
+                <img v-if="login" class='user-info-person' v-bind:src="getUserImg(<<user_id>>)" onerror="this.src = '<< url_for('static', filename='images/avatar/0.png') >>'" alt="">
+                
+                <a class="unlogin" v-if="!login" href="/login/">登录/注册</a>
+            </div>
+        </div>
+    </header>
+    
+    <main id="main">
+        <!-- 发帖窗口 -->
+        <div class="post-window" id="post-window">
+            <div class="window-name">发布帖子</div>
+            <div class="window-title">
+                <textarea class="form-control" name="" id="window-title-text" cols="30" rows="1" placeholder="标题" maxlength="120"></textarea>
+            </div>
+            <div class="window-content">
+                <textarea class="form-control" name="" id="window-content-text" cols="30" rows="10" placeholder="内容" maxlength="10000"></textarea>
+            </div>
+            <div class="post-button">
+                <button class="btn btn-outline-info" id="cancel-button" v-on:click="preview()">预览</button>
+                <button class="btn btn-outline-success" id="post-button" v-on:click="post()">发布</button>
+            </div>
+            <div class="preview-name">内容预览</div>
+            <div class="preview" v-html="mdConvered">
+            </div>
+        </div>
+    </main>
+    <script>
+        var headervue = new Vue({
+            el: ".header",
+            data: {
+                login: <<login>>,
+                notice_num: <<notice_num>>,
+                user_id: <<user_id>>,
+
+        },methods: {
+            getUserImg: function(e) {
+                return "<<url_for('static',filename='images/avatar/') >>" + String(e) + ".png"
+            },
+        }
+        })
+
+        var postvue = new Vue({
+            el: "#post-window",
+            data: {
+                mdConvered: "<br><br><br><br><br><br><br><br><br><br>",
+                mdConverter: null,
+            },
+            mounted() {
+                    this.mdConverter = new showdown.Converter({emoji: 'true', simplifiedAutoLink: 'true', literalMidWordUnderscores: 'true',
+                    strikethrough: 'true', tables: 'true', ghCodeBlocks: 'true', simpleLineBreaks: 'true', openLinksInNewWindow: 'true' });
+                    // emoji
+                    // link
+                    // 不解析下划线
+                    // 删除线
+                    // 表格
+                    // 代码块block
+                    // 换行符
+                    // 在新窗口打开链接
+            },
+            methods: {
+                preview: function() {
+                    var mdValue = $("#window-content-text").val();
+                    // prevent XSS
+                    mdValue = mdValue.replace(/script/, "sc-r-ipt")
+                    var mdHtml = this.mdConverter.makeHtml(mdValue)
+                    this.mdConvered = mdHtml
+                    
+                },
+                post: function() {
+                    var title = $("#window-title-text").val();
+                    var content = $("#window-content-text").val();
+
+                    $.ajax({
+                        url: '/api/posting/',
+                        type: 'post',
+                        async: false,
+                        cache: false,
+                        data: {"title":title, "content":content},
+                        dataType: 'json',
+                        success: function (data) {
+                            var code = data.code
+                            var msg = data.msg
+                            // 注册成功
+                            if (code == "APT004") {
+                                location.href = msg
+                            }else {
+                                alert("错误 " + code + msg)
+                            }
+                        },error: function () {
+                            // 注册失败，弹出错误信息。
+                            alert("CRG001:未知错误");
+
+                        }
+                    });
+
+
+                },
+            }
+        })
+    </script>
+    
+</body>
+</html>

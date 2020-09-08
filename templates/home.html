@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8" lang="zh">
+     <link rel="icon" type="image/x-ico" href="<< url_for('static',filename='images/logo.png') >>">
+    <title>AUBBS</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+    <!-- 引用jquery -->
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+
+    <!--引用bootstrap-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!--引用vue-->
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+
+    <!--引用本地js和css-->
+     <script src="<< url_for('static',filename='home/home.js') >>"></script>
+     <link rel="stylesheet" href="<< url_for('static',filename='home/home.css') >>">
+
+</head>
+<body class="body" id='body'>
+    <header class='header'>
+        <div class="header-div">
+            <img id='logo' src="<< url_for('static', filename='images/logo_words.png') >>" onclick="window.location.href = '/'" alt="">
+
+            <div class="user-info">
+                <button v-if="login" type="button" class="btn btn-success btn-sm user-info-post" onclick="window.location.href = '/posting/'">发帖</button>
+                <button v-if="login" type="button" class="btn btn-info btn-sm user-info-notification">消息(<<notice_num>>)</button>
+                <img v-if="login" class='user-info-person' v-bind:src="getUserImg(<<user_id>>)" onerror="this.src = '<< url_for('static', filename='images/avatar/0.png') >>'" alt="">
+                <a class="unlogin" v-if="!login" href="/login/">登录/注册</a>
+            </div>
+        </div>
+    </header>
+
+    <main id='main'>
+        <!-- 封面头 -->
+        <div class="welcome">
+            <!-- <img class="welcome-page" src="<< url_for('static',filename='images/11.jpg') >>" alt="main page"> -->
+            <img class="welcome-page" src="../static/images/12.jpg" alt="main page">
+            <div class="welcome-word">Hi, nice to meet you.</div>
+        </div>
+        <!-- 封面尾 -->
+          
+
+        <!-- 帖子头 -->
+        <div class="posts-container" id="posts"> 
+            <!-- vue只对域内有效，该域为 #posts -->
+            <div class="posts" v-for="post in posts">
+                <div class="poster">
+                    <img class="poster-image" v-bind:src="getUserImg(post.poster_id)" onerror="this.src = '<< url_for('static', filename='images/avatar/0.png') >>'" alt="">
+                    <a class="poster-name" href="">{{post.poster_nickname}}</a>
+                    <span class="badge badge-danger" v-show="post.top">置顶</span>
+                    <span class="badge badge-pill badge-info">{{post.reply_num}}</span>
+                    
+                </div>
+                
+                <div class="post-title"><a v-bind:href="getUrl(post.post_id)">{{post.title}}</a></div>
+                <div class="post-info">{{getTimeGap(post.last_reply_at)}} & 最后回复来自 <a href="">{{post.last_replyer_nickname}}</a></div>
+                
+                <!-- <div class="post-content">
+                    <div class="post-script">{{post.posttext + post.posttext}}</div>
+                    <img class="post-image" v-bind:src="post.posterimg" alt="">
+                </div> -->
+            </div>
+        </div>
+
+    </main>
+
+    <!--    页尾-->
+    <footer>
+        <div class="divider"></div>
+        <p >我们是没有底线的</p>
+    </footer>
+    <!--    页尾结束-->
+    
+    <script>
+        var headervue = new Vue({
+            el: ".header",
+            data: {
+                login: <<login>>,
+                notice_num: <<notice_num>>,
+                user_id: <<user_id>>,
+                
+            },methods: {
+                getUserImg: function(e) {
+                    return "<<url_for('static',filename='images/avatar/') >>" + String(e) + ".png"
+                },
+            }
+        })
+
+        var postvue = new Vue({
+            el: "#main",
+            data: {
+                posts: [
+                    
+                    {% autoescape false %}
+                        << posts_data >>
+
+                    {% endautoescape %}
+                    
+                    // {post_id: "1", poster_nickname: "vogel", poster_id: "10000", title: "title", last_reply_at: "1592381124.0", last_replyer_nickname: "vogel", last_replyer_id: "", reply_num: "27", top: false},
+
+                ],
+                loading: false,
+
+            },mounted () {
+
+            },
+            methods: {
+                
+                getUserImg: function(e) {
+                    return "<<url_for('static',filename='images/avatar/') >>" + String(e) + ".png"
+
+                },getTimeGap: function(e) {
+                    //获取最后回复的时间
+                    var start_time = e
+                    var start_time = new Date(start_time);
+                    var end_time = new Date()
+                    gap = (end_time - start_time) / 1000
+                    if(gap < 60) {
+                        return '几秒前'
+                    }else if(gap < 3600) {
+                        return parseInt(gap/60) + "分钟前"
+                    }else if(gap < 86400) {
+                        return parseInt(gap/60/60) + "小时前"
+                    }else if(gap < 604800) {
+                        return parseInt(gap/60/60/24) + "天前"
+                    }else{
+                        return "很久以前"
+                    }
+
+                    return gap;
+                },getUrl: function(e) {
+                    return "/post/" + String(e) + "/"
+                }
+
+                       
+            }
+        })
+    </script>
+    
+
+</body>
+</html>
