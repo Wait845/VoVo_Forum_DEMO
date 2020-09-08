@@ -1,0 +1,65 @@
+#main {
+    max-width: 768px;
+    min-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5em;
+}
+.welcome_page {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5%;
+    position: relative;
+}
+.welcome_page img {
+    width: 100%;
+}
+.info {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+}
+.notification {
+    text-align: center;
+}
+
+.avatar img{
+    position: relative;
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 30%;
+    border-radius: 10%;
+}
+.btn-group-vertical {
+    text-align: right;
+}
+.btn_select {
+    background-color: #3D62DA;
+}
+
+#photofile {
+    display: none;
+}
+.check_email {
+    margin-top: 5%;
+}
+#btn_sendcode {
+    background-color: #3D62DA;
+}
+.input_code {
+    margin-top: 1%;
+}
+.input_name {
+    margin-top: 5%;
+}
+.input_password {
+    margin-top: 5%;
+}
+.btn_register {
+    margin-top: 5%;
+    width: 100%;
+    background-color: #3D62DA;
+}
+

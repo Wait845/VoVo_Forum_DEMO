@@ -1,0 +1,194 @@
+body {
+    background-color: rgb(245, 245, 245);
+}
+.header {
+    position: relative;
+    height: 3em;
+    box-shadow: 1px 1px 5px #888888;
+    width: 100%;
+}
+.header-div {
+    max-width: 768px;
+    min-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#logo {
+    position: absolute;
+    height: 100%;
+}
+.user-info {
+    position: relative;
+    text-align: end;
+    height: 3em;
+    width: 100%;
+}
+.user-info-post {
+    position: relative;
+    height: 80%;
+    right: 2em;
+    top: 10%;
+}
+.user-info-notification {
+    position: relative;
+    height: 80%;
+    right: 1.5em;
+    top: 10%;
+}
+
+.user-info-person {
+    position: relative;
+    top: 10%;
+    height: 80%;
+    border-radius: 20%;
+}
+.unlogin {
+    position: relative;
+    top: 25%;
+    right: 5%;
+
+}
+#main {
+    /*margin-top: 1%;*/
+    margin-top: 1em;
+    max-width: 768px;
+    min-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    word-break: break-all;
+}
+.host-box {
+    width: 100%;
+    /*margin-top: 7%;*/
+    padding-bottom: 0.5em;
+    background-color: white;
+}
+
+.user-pic {
+    position: relative;
+    float: right;
+    margin: 1em 1em 1em 1em;
+    height: 3em;
+    border-radius: 20%;
+}
+
+.host-topic {
+    padding-top: 1em;
+    margin-left: 5%;
+}
+
+.host-info {
+    display: inline-block;
+    position: relative;
+    top: -0.75em;
+    font-size: small;
+    color: #777;
+}
+.user-name {
+    font-size: medium;
+}
+
+.host-content {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    /*margin-bottom: 2%;*/
+}
+.host-content p {
+    margin-bottom: 0;
+}
+.divider {
+    width: 100%;
+    height: 2px;
+    background-color: #eee;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.answers-box {
+    margin-top: 2%;
+    width: 100%;
+    background-color: white;
+    padding-top: 1%;
+}
+.answers-box-info {
+    width: 80%;
+    margin-left: 2em;
+    color: #777;
+    font-size: small;
+}
+.answer-sur {
+    margin-bottom: 1em;
+}
+.answer {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    width: 96%;
+}
+.answer-pic {
+    position: relative;
+    /*top:0.75em;*/
+    width: 2.5em;
+    border-radius: 20%;
+}
+.answer-name {
+    margin-left: 0.75em;
+    position: relative;
+    top:-0.75em;
+    color: #444;
+
+}
+.answer-time {
+    position: relative;
+    font-size: small;
+    color: #777;
+    width: auto;
+    display: inline-block;
+    top:-1em;
+
+
+}
+.answer-floor {
+    position: relative;
+    font-size: small;
+    color: #777;
+    width: auto;
+    float: right;
+}
+.answer-content {
+    margin-top: -1.25em;
+    width: 80%;
+    margin-left: 4em;
+    margin-right: auto;
+}
+
+
+.reply-box {
+    background-color: white;
+    width: 100%;
+    padding-left: 2%;
+    padding-top: 2%;
+    padding-right: 2%;
+    padding-bottom: 2%;
+}
+.reply-box-content {
+    position: relative;
+    width: 100%;
+    /*margin-bottom: 2%;*/
+}
+.reply-send {
+    background-color: #3D62DA;
+
+}
+
+footer {
+    max-width: 768px;
+    min-width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    margin-bottom: 2em;
+    color: #888888;
+}

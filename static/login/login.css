@@ -1,0 +1,71 @@
+.body {
+}
+#main {
+    max-width: 768px;
+    min-width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5em;
+    
+}
+.welcome_page {
+    width: 70%;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    /*left: 15%;*/
+    /*margin-top: 15%;*/
+}
+.welcome_page img{
+    /* position: relative; */
+    width: 100%;
+}
+.alert-danger {
+    position: relative;
+    margin-top: 3%;
+    /*left: 15%;*/
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    visibility: hidden;
+}
+.alert-danger p{
+    margin-bottom: 0;
+}
+.form {
+    position: relative;
+    /*left: 15%;*/
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+.btn-primary {
+    background-color: #3D62DA;
+    width: 100%;
+}
+.qanda {
+    position: relative;
+    width: 70%;
+    left: 15%;
+    margin-bottom: 10%;
+
+}
+.qanda p {
+    margin-bottom: 0;
+}
+.qanda p.question {
+    margin-top: 1rem;
+}
+.divider {
+    width: 100%;
+    height: 2px;
+    background-color: #eee;
+}
+#qanda {
+    display: none;
+
+}
