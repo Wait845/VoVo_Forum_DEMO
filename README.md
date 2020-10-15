@@ -1,3 +1,11 @@
+# 更新
+2020-10-15
+* 修改了sql模块的执行方法 由原先的单条sql事务模式修改为现在的 单/多条sql事务。避免了多条sql的情况下频繁的向数据库服务器发送请求。
+* 优化了业务代码的逻辑 使条理更清晰，便于阅读及修改
+
+# 提示
+该论坛系统目前只是一个DEMO项目，并存在安全风险。适用于学习、展示，请不要用于生产环境
+
 # VoVo Forum
 一个基于Python/Flask的前后端分离论坛系统
 # 介绍
@@ -19,13 +27,10 @@ nano config.ini
 python3 vovo.py
 ```
 
-# 提示
-该论坛系统目前只是一个DEMO项目，请不要用于生产环境
-
 # 已知BUG
 * 在移动端上的时间显示功能不正常
 * 该系统占未对用户输入的数据进行过滤，可能导致服务端收到攻击
 
 # 截图
-![home](https://github.com/Wait845/VoVo_Forum_DEMO/blob/master/home.png?raw=true)
-![post](https://github.com/Wait845/VoVo_Forum_DEMO/blob/master/post.png?raw=true)
+![home](https://github.com/Wait845/VoVo_Forum_DEMO/blob/master/photos/home.png?raw=true)
+![post](https://github.com/Wait845/VoVo_Forum_DEMO/blob/master/photos/post.png?raw=true)

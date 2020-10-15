@@ -25,9 +25,11 @@ class email():
             msg_root.attach(msg_text)  # attach邮件正文内容
 
             smtp = smtplib.SMTP('smtp.gmail.com:587')
+            # smtp = smtplib.SMTP('smtp.qq.com')
+
             smtp.ehlo()
             smtp.starttls()
-            print(self.USER_ACCOUNT['username'], self.USER_ACCOUNT['password'])
+            # print(self.USER_ACCOUNT['username'], self.USER_ACCOUNT['password'])
             smtp.login(self.USER_ACCOUNT['username'], self.USER_ACCOUNT['password'])
             smtp.sendmail(self.SENDER, receivers, msg_root.as_string())
             print("邮件发送成功")
